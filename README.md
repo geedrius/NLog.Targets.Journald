@@ -12,7 +12,7 @@ It can be used with version 4.7.13 and later.
 
 ### How to use
 
- 1. Add reference to `NLog.Targets.Journald.csproj` in your application project.
+ 1. Add reference to `NLog.Targets.Journald` [NuGet package](https://www.nuget.org/packages/NLog.Targets.Journald/) in your project.
  2. Modify your application configuration to load and use `Journald` target.
 
 ### `NLog.config` configuration snippet
@@ -20,7 +20,6 @@ It can be used with version 4.7.13 and later.
 See [NLog docs](https://github.com/NLog/NLog/#getting-started) for more information.
 
 ```xml
-...
 <extensions>
     <add assembly="NLog.Targets.Journald"/>
 </extensions>
@@ -32,7 +31,6 @@ See [NLog docs](https://github.com/NLog/NLog/#getting-started) for more informat
 <rules>
     <logger name="*" minlevel="Trace" writeTo="journald" />
 </rules>
-...
 ```
 
 [NLog.config](/src/Demo/NLog.config) is simple but complete example.
@@ -42,7 +40,6 @@ See [NLog docs](https://github.com/NLog/NLog/#getting-started) for more informat
 For ASP.NET Core, .NET Core, .NET5 ant later projects. See [NLog.Extensions.Logging]( https://github.com/NLog/NLog.Extensions.Logging/wiki/NLog-configuration-with-appsettings.json) for more information.
 
 ```json
-...
 "NLog": {
     "extensions": [
       { "assembly": "NLog.Targets.Journald" }
@@ -61,12 +58,37 @@ For ASP.NET Core, .NET Core, .NET5 ant later projects. See [NLog.Extensions.Logg
       }
     }
   }
-...
 ```
 
-### To Do
+### Journal fields
 
-- Upload Nuget package
+NLog log events are emmited to Journald using the following fields.
+
+| Journal field | Field type    | Description |
+| ------------- | ------------- | ------------|
+| `PRIORITY` | User | NLog `LogLevel` mapped to journal priority value between 2 (`crit`) and 7 (`debug`). |
+| `MESSAGE` | User | Same as `${message}` in NLog layout config. |
+| `LEVEL` | Custom | Same as `${level}` in NLog layout config. |
+| `LOGGER` | Custom | Same as `${logger}` in NLog layout config. |
+| `TIMESTAMP` | Custom | NLog event timestamp as [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) string. Example: `2022-02-11T15:30:47+00:00`. |
+| `STACKTRACE` | Custom | NLog event `StackTrace` property as string. |
+| `EXCEPTION_TYPE` | Custom | NLog event exception type name. Example: `System.ArgumentOutOfRangeException`. |
+| `EXCEPTION_MESSAGE` | Custom | NLog event exception `Message` property. |
+| `EXCEPTION_STACKTRACE` | Custom | NLog event exception `StackTrace` property. |
+
+
+More info about [Journal fields](https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html).
+
+### NLog `LogLevel` to Journal Priority mapping
+
+| NLog LogLevel | Journal priority decimal | Journal priority string |
+| ------------- | ------------- | ------------|
+| `Fatal` | 2 | `crit` |
+| `Error` | 3 | `err` |
+| `Warn`  | 4 | `warning` |
+| `Info`  | 6 | `info` |
+| `Debug` | 7 | `debug` |
+| `Trace` | 7 | `debug` |
 
 ## License
 
