@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Targets.Journald", "NLog.Targets.Journald\NLog.Targets.Journald.csproj", "{4BD91A38-895A-4C6C-BC8F-DACBC140DA31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", "{2DA8C2C6-938D-442D-BA1B-D1E65E68F4C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4BD91A38-895A-4C6C-BC8F-DACBC140DA31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BD91A38-895A-4C6C-BC8F-DACBC140DA31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BD91A38-895A-4C6C-BC8F-DACBC140DA31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BD91A38-895A-4C6C-BC8F-DACBC140DA31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DA8C2C6-938D-442D-BA1B-D1E65E68F4C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DA8C2C6-938D-442D-BA1B-D1E65E68F4C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DA8C2C6-938D-442D-BA1B-D1E65E68F4C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DA8C2C6-938D-442D-BA1B-D1E65E68F4C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
