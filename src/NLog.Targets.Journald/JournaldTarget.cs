@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Mono.Unix;
+using NLog.Config;
 
 namespace NLog.Targets
 {
@@ -17,6 +18,11 @@ namespace NLog.Targets
     [Target("Journald")]
     public class JournaldTarget: TargetWithLayout
     {
+        /// <summary>
+        /// Optional. Emitted as SYSLOG_IDENTIFIER journal field.
+        /// </summary>
+        public string SysLogIdentifier { get; set; }
+    
         private const string SystemdJournalSocket = "/run/systemd/journal/socket";
 
         // encoding used to write journald output
@@ -75,6 +81,10 @@ namespace NLog.Targets
             count += WriteField("LEVEL", logEvent.Level.ToString(), buffer, position + count);
             count += WriteField("LOGGER", logEvent.LoggerName, buffer, position + count);
             count += WriteField("TIMESTAMP", logEvent.TimeStamp.ToString("O"), buffer, position + count);
+            if (!string.IsNullOrEmpty(SysLogIdentifier))
+            {
+                count += WriteField("SYSLOG_IDENTIFIER", SysLogIdentifier, buffer, position + count);
+            }
             if (logEvent.Exception != null)
             {
                 count += WriteField("EXCEPTION_TYPE", logEvent.Exception.GetType().FullName, buffer, position + count);
