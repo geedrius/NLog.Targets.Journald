@@ -1,13 +1,12 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Mono.Unix;
 using NLog.Config;
 
-namespace NLog.Targets
+namespace NLog.Targets.Journald
 {
 
     /// <summary>
@@ -23,6 +22,12 @@ namespace NLog.Targets
         /// </summary>
         public string SysLogIdentifier { get; set; }
     
+        /// <summary>
+        /// Optional list of additional static Journal fields to add to the event.
+        /// </summary>
+        [ArrayParameter(typeof(StaticField), "static-field")]
+        public IList<StaticField> StaticFields { get; set; } = new List<StaticField>();
+        
         private const string SystemdJournalSocket = "/run/systemd/journal/socket";
 
         // encoding used to write journald output
@@ -97,6 +102,12 @@ namespace NLog.Targets
             if (logEvent.HasStackTrace)
             {
                 count += WriteField("STACKTRACE", logEvent.StackTrace.ToString(), buffer, position + count);
+            }
+            foreach (var staticField in StaticFields)
+            {
+                // Journald accepts only uppercase field keys
+                var key = staticField.Key.ToUpperInvariant();
+                count += WriteField(key, staticField.Value, buffer, position + count);
             }
             return count;
         }
