@@ -15,6 +15,14 @@ It can be used with version 4.7.13 and later.
  1. Add reference to `NLog.Targets.Journald` [NuGet package](https://www.nuget.org/packages/NLog.Targets.Journald/) in your project.
  2. Modify your application configuration to load and use `Journald` target.
 
+### Configuration parameters
+
+| Parameter | Optional/Mandatory | Description |
+| --------- | -------------------| ----------- |
+| `Layout`  | Mandatory | Used to render journal record `MESSAGE` field from NLog event. |
+| `SysLogIdentifier` | Optional | Useful for log filtering with `journalctl -t <syslog identifier>`. |
+| `StaticFields` | Optional | Zero, one or more additional static fields output to journal, accessible using `journalctl -o verbose` or `journalctl KEY=VALUE` |
+
 ### `NLog.config` configuration snippet
 
 See [NLog docs](https://github.com/NLog/NLog/#getting-started) for more information.
@@ -25,7 +33,17 @@ See [NLog docs](https://github.com/NLog/NLog/#getting-started) for more informat
 </extensions>
 
 <targets>
-    <target xsi:type="Journald" name="journald" layout="${logger} ${message}" />
+    <target xsi:type="Journald" name="journald">
+        <!-- mandatory -->
+        <layout>"${logger} ${message}"</layout>
+        <!-- optional -->
+        <sysLogIdentifier>my-service</sysLogIdentifier>
+        <!-- optional, multiple allowed -->
+        <!-- Key must consist of upper case letters, numbers and underscores only.
+             It is always converted to upper case. -->
+        <static-field key="KEY_1" value="value 1" />
+        <static-field key="KEY_2" value="value 2" />
+    </target>
 </targets>
 
 <rules>
@@ -47,7 +65,12 @@ For ASP.NET Core, .NET Core, .NET5 ant later projects. See [NLog.Extensions.Logg
     "targets": {
       "journald": {
         "type": "Journald",
-        "layout": "${logger} ${message}"
+        "layout": "${logger} ${message}",
+        "syslogIdentifier": "my-service",
+        "staticFields": [ 
+          { "Key": "KEY_1", "Value": "value 1" }, 
+          { "Key": "KEY_2", "Value": "value 2" } 
+        ],
       }
     },
     "rules": {
